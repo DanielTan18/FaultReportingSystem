@@ -42,8 +42,7 @@ class _ReportScreenState extends State<ReportScreen> {
   TextEditingController _streetlightController = TextEditingController();
   TextEditingController _locationInputController = TextEditingController();
   File _imageFile;
-  var googlePlace =
-      gplace.GooglePlace("AIzaSyB-Zw1cjaBj1-D381tXQDc-Ch7H5WC12mU");
+  var googlePlace = gplace.GooglePlace("<YOUR API KEY>");
   final ImagePicker _picker = ImagePicker();
   FaultReportServices _faultReportServices = FaultReportServices();
 
