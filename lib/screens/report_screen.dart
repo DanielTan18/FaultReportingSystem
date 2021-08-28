@@ -42,7 +42,8 @@ class _ReportScreenState extends State<ReportScreen> {
   TextEditingController _streetlightController = TextEditingController();
   TextEditingController _locationInputController = TextEditingController();
   File _imageFile;
-  var googlePlace = gplace.GooglePlace("<YOUR API KEY>");
+  var googlePlace =
+      gplace.GooglePlace("AIzaSyB-Zw1cjaBj1-D381tXQDc-Ch7H5WC12mU");
   final ImagePicker _picker = ImagePicker();
   FaultReportServices _faultReportServices = FaultReportServices();
 
@@ -90,9 +91,10 @@ class _ReportScreenState extends State<ReportScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0),
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 2.0),
               child: TextField(
                 controller: _locationInputController,
+                readOnly: true,
                 decoration: InputDecoration(
                     hintText: "Location",
                     labelText: "Location",
@@ -107,28 +109,34 @@ class _ReportScreenState extends State<ReportScreen> {
                         color: Colors.blueAccent,
                         padding: const EdgeInsets.fromLTRB(0, 0, 23, 0),
                         onPressed: () async {
-                          l.Location location = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MapPickerPage()),
-                          );
-                          if (location != null) {
-                            setState(() {
-                              _lat = location.lat;
-                              _lng = location.lng;
-                            });
+                          try {
+                            l.Location location = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MapPickerPage()),
+                            );
+                            if (location != null && location.lat != 0.0) {
+                              setState(() {
+                                _lat = location.lat;
+                                _lng = location.lng;
+                              });
+
+                              List<Placemark> placemarks =
+                                  await placemarkFromCoordinates(_lat, _lng);
+
+                              var first = placemarks.first;
+                              formattedAddress =
+                                  '${first.name},  ${first.thoroughfare}, ${first.subLocality},${first.locality}, ${first.administrativeArea}';
+                              _locationInputController.text = formattedAddress;
+                            }
+                          } catch (e) {
+                            print("No location coordinates detected, " + e);
                           }
-                          List<Placemark> placemarks =
-                              await placemarkFromCoordinates(_lat, _lng);
-                          var first = placemarks.first;
-                          formattedAddress =
-                              '${first.name},  ${first.thoroughfare}, ${first.subLocality},${first.locality}, ${first.administrativeArea}';
-                          _locationInputController.text = formattedAddress;
                         },
                         icon: Icon(
                           Icons.location_on_outlined,
                           size: 28,
-                          color: Colors.black54,
+                          color: Colors.blueAccent,
                         ))),
                 keyboardType: TextInputType.text,
               ),
@@ -195,15 +203,24 @@ class _ReportScreenState extends State<ReportScreen> {
                           child: Container(
                             width: 110,
                             child: TextButton(
-                                onPressed: () {
-                                  changeScreen(
-                                      context, StreetlightGmapScreen());
+                                onPressed: () async {
+                                  try {
+                                    _streetlightController.text =
+                                        await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              StreetlightGmapScreen()),
+                                    );
+                                  } catch (e) {
+                                    print(e);
+                                  }
                                 },
-                                child: Text(
-                                  "View Streetlights",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
+                                child: CustomText(
+                                  text: "Select Streetlight",
+                                  size: 15,
+                                  color: Colors.blueAccent,
+                                  weight: FontWeight.bold,
                                 )),
                           ),
                         ),
@@ -211,8 +228,11 @@ class _ReportScreenState extends State<ReportScreen> {
                             onPressed: () {
                               changeScreen(context, ScanScreen());
                             },
-                            child: Text("Scan Text",
-                                style: TextStyle(fontSize: 15))),
+                            child: CustomText(
+                                text: "Scan Text",
+                                size: 15,
+                                color: Colors.blueAccent,
+                                weight: FontWeight.bold)),
                         SizedBox(width: 10),
                       ],
                     ),
@@ -240,7 +260,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         changeScreen(context, LabelScreen());
                       },
                       icon: Icon(Icons.image_search,
-                          size: 28, color: Colors.black54),
+                          size: 28, color: Colors.blueAccent),
                     )),
                 keyboardType: TextInputType.text,
               ),
@@ -252,7 +272,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(8)),
                       padding: EdgeInsets.symmetric(
-                        vertical: 8,
+                        vertical: 10,
                       )),
                   child: CustomText(
                       text: "Submit",
@@ -339,25 +359,33 @@ class _ReportScreenState extends State<ReportScreen> {
     final pickedFile = await _picker.getImage(
       source: source,
     );
-
     setState(() {
-      if (_imageFile != null) {
+      if (pickedFile != null) {
         _imageFile = File(pickedFile.path);
         print('image path is $_imageFile');
+      } else {
+        Flushbar(
+          title: "No Image Selected",
+          message: "Please upload an image to continue!",
+          duration: Duration(seconds: 3),
+        )..show(context);
       }
       //dispose();
     });
   }
 
   Future uploadPic(BuildContext context) async {
-    fileName = path.basename(_imageFile.path);
+    if (_imageFile != null) {
+      fileName = path.basename(_imageFile.path);
+    } else {
+      print("Image File is null.");
+    }
     StorageReference firebaseStorageRef =
         FirebaseStorage.instance.ref().child(fileName);
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
     // StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
     var dowurl = await (await uploadTask.onComplete).ref.getDownloadURL();
     url = dowurl.toString();
-    print("uploadpic url is " + url);
     return url;
     // setState(() {
     //   print("Uploaded");

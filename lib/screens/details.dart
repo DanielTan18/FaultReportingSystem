@@ -1,15 +1,10 @@
-import 'package:fyp1_test/models/faultreport.dart';
 import 'package:flutter/material.dart';
-import 'package:fyp1_test/providers/faultreport.dart';
-import 'package:fyp1_test/helpers/style.dart';
 import 'package:fyp1_test/helpers/screen_navigation.dart';
-import 'package:fyp1_test/providers/app.dart';
-import 'package:fyp1_test/providers/user.dart';
+import 'package:fyp1_test/helpers/style.dart';
+import 'package:fyp1_test/models/faultreport.dart';
 import 'package:fyp1_test/screens/gmapscreen.dart';
 import 'package:fyp1_test/widgets/custom_text.dart';
-import 'package:fyp1_test/widgets/loading.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class Details extends StatefulWidget {
   final FaultReportModel faultreport;
@@ -24,7 +19,6 @@ class Details extends StatefulWidget {
 class _DetailsState extends State<Details> {
   double widgetOpacity = 0.0;
   bool showMessage = false;
-  final _key = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -38,10 +32,6 @@ class _DetailsState extends State<Details> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context);
-    final app = Provider.of<AppProvider>(context);
-    final faultProvider =
-        Provider.of<FaultReportProvider>(context, listen: false);
     return Scaffold(
       body: Stack(children: [
         Positioned.fill(

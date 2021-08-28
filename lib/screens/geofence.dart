@@ -37,6 +37,7 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
 
   Set<Marker> _markers = HashSet<Marker>();
   Set<Circle> _circles = HashSet<Circle>();
+  // ignore: unused_field
   GoogleMapController _mapController;
   List<Geofence> geofenceList = [];
   List<Geofence> districtList = [
@@ -49,26 +50,6 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final user = Provider.of<UserProvider>(context);
-    user.getReports();
-
-    for (int i = 0; i < user.faultreports.length; i++) {
-      if (user.faultreports[i].status != "Completed" &&
-          user.faultreports[i].status != "Rejected") {
-        geofenceList.add(
-          Geofence(
-              id: user.faultreports[i].id,
-              latitude: user.faultreports[i].lat,
-              longitude: user.faultreports[i].lng,
-              radius: [GeofenceRadius(id: 'radius_100m', length: 100)]),
-        );
-      }
-    }
-  }
-
   void _onMapCreated(GoogleMapController controller) {
     final user = Provider.of<UserProvider>(context, listen: false);
     user.getReports();
@@ -79,6 +60,13 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
       for (int i = 0; i < user.faultreports.length; i++) {
         if (user.faultreports[i].status != "Completed" &&
             user.faultreports[i].status != "Rejected") {
+          geofenceList.add(
+            Geofence(
+                id: user.faultreports[i].id,
+                latitude: user.faultreports[i].lat,
+                longitude: user.faultreports[i].lng,
+                radius: [GeofenceRadius(id: 'radius_100m', length: 100)]),
+          );
           _markers.add(Marker(
               markerId: MarkerId("$i"),
               position:
@@ -89,6 +77,7 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
         }
       }
     });
+    print("geofence list is " + geofenceList.toString());
   }
 
   void _setCircles() {
@@ -159,7 +148,7 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
               ", radius " +
               geofenceRadius.id);
           scheduleNotification("You have entered ${geofence.id}!",
-              "Click here to view reports.");
+              "View the Zone Detection Screen to view relevant authorities!");
         }
         break;
     }
@@ -179,7 +168,7 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
     final errorCode = getErrorCodesFromError(error);
     if (errorCode == null) {
       dev.log('Undefined error: $error');
-      print("some eerrorr: $error");
+      print("some error: $error");
       return;
     }
 
@@ -224,6 +213,7 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
                     icon: Icon(Icons.close, color: white),
                     onPressed: () {
                       Navigator.pop(context);
+                      geofenceService.stop();
                     }),
                 centerTitle: true),
             body: buildContentView()),

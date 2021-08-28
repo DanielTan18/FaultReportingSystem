@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp1_test/helpers/screen_navigation.dart';
 import 'package:fyp1_test/helpers/style.dart';
-import 'package:fyp1_test/providers/app.dart';
 import 'package:fyp1_test/providers/user.dart';
 import 'package:fyp1_test/screens/geofence.dart';
 import 'package:fyp1_test/screens/login.dart';
@@ -21,9 +19,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
-    final app = Provider.of<AppProvider>(context);
-    Map data;
-    final databaseReference = Firestore.instance;
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -85,18 +80,27 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 42),
-            Row(
-              children: [
-                SizedBox(width: 24),
-                IconButton(
+            Stack(children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 30.0),
+                child: IconButton(
                     color: white,
                     iconSize: 32,
                     icon: Icon(Icons.menu),
                     onPressed: () => scaffoldKey.currentState.openDrawer()),
-                SizedBox(width: 70),
-                CustomText(text: "Welcome,", size: 32, color: white),
-              ],
-            ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(width: 12),
+                  CustomText(
+                      text: "Report-Thing",
+                      size: 36,
+                      color: white,
+                      weight: FontWeight.bold),
+                ],
+              ),
+            ]),
             Container(
               height: 64,
               child: Row(
@@ -110,9 +114,11 @@ class _HomeState extends State<Home> {
                   ),
                   SizedBox(width: 10),
                   CustomText(
-                    text: user.userModel?.name,
+                    text: user.userModel.name.isNotEmpty
+                        ? user.userModel.name
+                        : "Loading...",
                     weight: FontWeight.bold,
-                    size: 42,
+                    size: 32,
                     color: white,
                   )
                 ],
@@ -120,7 +126,7 @@ class _HomeState extends State<Home> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  top: 16.0, left: 24, right: 24, bottom: 0),
+                  top: 16.0, left: 32, right: 32, bottom: 0),
               child: Container(
                 height: 250,
                 child: GestureDetector(
@@ -156,7 +162,7 @@ class _HomeState extends State<Home> {
             SizedBox(
               height: 250,
               child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
                   child: GridView.count(
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10,
@@ -186,7 +192,7 @@ class _HomeState extends State<Home> {
                               ),
                               CustomText(
                                 text: "View Fault Reports",
-                                size: 17,
+                                size: 16,
                                 weight: FontWeight.bold,
                               )
                             ],
@@ -216,7 +222,7 @@ class _HomeState extends State<Home> {
                               ),
                               CustomText(
                                 text: "Zone Detection",
-                                size: 17,
+                                size: 16,
                                 weight: FontWeight.bold,
                               )
                             ],

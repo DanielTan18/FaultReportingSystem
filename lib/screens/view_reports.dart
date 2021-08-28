@@ -1,15 +1,13 @@
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp1_test/helpers/screen_navigation.dart';
 import 'package:fyp1_test/helpers/style.dart';
 import 'package:fyp1_test/models/faultreport.dart';
-import 'package:fyp1_test/providers/app.dart';
 import 'package:fyp1_test/providers/user.dart';
 import 'package:fyp1_test/screens/details.dart';
 import 'package:fyp1_test/widgets/custom_text.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:provider/provider.dart';
 
 class ViewReportsScreen extends StatelessWidget {
   final FaultReportModel faultreport;
@@ -19,7 +17,6 @@ class ViewReportsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
-    final app = Provider.of<AppProvider>(context);
     user.getReports();
     user.faultreports.sort((a, b) => b.createdAt - a.createdAt);
     for (var s in user.faultreports) {
@@ -201,28 +198,5 @@ class ViewReportsScreen extends StatelessWidget {
                 );
               }),
         ));
-  }
-
-  void initState() {}
-}
-
-Future<Widget> _getImage(BuildContext context, String imageName) async {
-  Image image;
-  await FireStorageService.loadImage(context, imageName).then((value) {
-    image = Image.network(
-      value.toString(),
-      fit: BoxFit.scaleDown,
-    );
-  });
-}
-
-class FireStorageService extends ChangeNotifier {
-  FireStorageService();
-  static Future<dynamic> loadImage(
-      BuildContext context, String imagepath) async {
-    return await FirebaseStorage.instance
-        .ref()
-        .child(imagepath)
-        .getDownloadURL();
   }
 }

@@ -8,7 +8,7 @@ class PickerBloc with ChangeNotifier {
   StreamController<Location> locationController =
       StreamController<Location>.broadcast();
   Location currentLocation;
-  static const mapKey = '<YOUR API KEY>';
+  static const mapKey = 'AIzaSyB-Zw1cjaBj1-D381tXQDc-Ch7H5WC12mU';
 
   static PickerBloc _instance;
   static PickerBloc getInstance() {

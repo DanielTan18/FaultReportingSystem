@@ -1,13 +1,12 @@
 import 'dart:io';
 
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp1_test/widgets/controls_label.dart';
-import 'package:google_ml_kit/google_ml_kit.dart';
-import 'controls_widget.dart';
-import 'text_area_widget.dart';
-import '../api/google_ml_kit.dart';
-import 'package:clipboard/clipboard.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../api/google_ml_kit.dart';
+import 'text_area_widget.dart';
 
 class ImageLabellingWidget extends StatefulWidget {
   const ImageLabellingWidget({Key key}) : super(key: key);
@@ -29,7 +28,7 @@ class _ImageLabellingWidgetState extends State<ImageLabellingWidget> {
           ControlsLabelWidget(
             onClickedPickImage: pickImage,
             onClickedScanText: scanText,
-            onClickedClear: clear,
+            onClickedClear: takeImage,
           ),
           const SizedBox(height: 16),
           TextAreaWidget(
@@ -43,6 +42,11 @@ class _ImageLabellingWidgetState extends State<ImageLabellingWidget> {
             ? Image.file(image)
             : Icon(Icons.photo, size: 80, color: Colors.black),
       );
+
+  Future takeImage() async {
+    final file = await ImagePicker().getImage(source: ImageSource.camera);
+    if (file != null) setImage(File(file.path));
+  }
 
   Future pickImage() async {
     final file = await ImagePicker().getImage(source: ImageSource.gallery);

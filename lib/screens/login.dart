@@ -1,12 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fyp1_test/providers/user.dart';
+import 'package:flutter/material.dart';
 import 'package:fyp1_test/helpers/screen_navigation.dart';
 import 'package:fyp1_test/helpers/style.dart';
+import 'package:fyp1_test/providers/user.dart';
 import 'package:fyp1_test/screens/registration.dart';
 import 'package:fyp1_test/widgets/custom_text.dart';
 import 'package:fyp1_test/widgets/loading.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
 
 import 'home.dart';
 
@@ -31,6 +30,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   SizedBox(
                     height: 50,
+                  ),
+                  CustomText(
+                    text: "Report-Thing",
+                    size: 36,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -85,6 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: GestureDetector(
                       onTap: () async {
                         if (!await authProvider.signIn()) {
+                          // ignore: deprecated_member_use
                           _key.currentState.showSnackBar(
                               SnackBar(content: Text("Login failed!")));
                           return;

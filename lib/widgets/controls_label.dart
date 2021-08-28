@@ -17,19 +17,19 @@ class ControlsLabelWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(width: 10),
-          RaisedButton(
+          ElevatedButton(
             onPressed: onClickedPickImage,
             child: Text('Pick Image'),
           ),
           const SizedBox(width: 12),
-          RaisedButton(
+          ElevatedButton(
             onPressed: onClickedScanText,
             child: Text('Extract Labels'),
           ),
           const SizedBox(width: 12),
-          RaisedButton(
+          ElevatedButton(
             onPressed: onClickedClear,
-            child: Text('Clear'),
+            child: Text('Take Image'),
           ),
           SizedBox(width: 25),
         ],

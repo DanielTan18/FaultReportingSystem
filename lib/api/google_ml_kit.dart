@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 
 class GoogleMLApi {
@@ -45,11 +44,6 @@ class GoogleMLApi {
     String text = '';
 
     for (TextBlock block in recognisedText.blocks) {
-      final Rect rect = block.rect;
-      final List<Offset> cornerPoints = block.cornerPoints;
-      // final String text = block.text;
-      final List<String> languages = block.recognizedLanguages;
-
       for (TextLine line in block.lines) {
         for (TextElement element in line.elements) {
           text = text + element.text + ' ';
@@ -64,9 +58,6 @@ class GoogleMLApi {
     String result = '';
     int i = 1;
     for (ImageLabel label in labels) {
-      final String text = label.label;
-      final int index = label.index;
-      final double confidence = label.confidence;
       result = result + '${label.label} \n';
       i++;
       if (i == 6) {

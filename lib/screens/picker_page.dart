@@ -30,10 +30,10 @@ class MapPickerBody extends StatelessWidget {
               children: <Widget>[
                 MapPicker(bloc),
                 SearchBox(bloc),
+                Footer(),
               ],
             ),
           ),
-          Footer(),
         ],
       ),
     );
@@ -44,25 +44,30 @@ class Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PickerBloc pickerBloc = Provider.of<PickerBloc>(context);
-    return Container(
-      height: 90,
-      width: double.infinity,
-      color: Colors.blue[50],
-      child: FractionallySizedBox(
-        widthFactor: 0.7,
-        heightFactor: 0.5,
-        child: RaisedButton(
-          color: Colors.blue,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-          onPressed: () {
-            Navigator.pop(context, pickerBloc.currentLocation);
-          },
-          child: Text(
-            "Confirm",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        height: 90,
+        width: double.infinity,
+        color: Colors.transparent,
+        child: FractionallySizedBox(
+          widthFactor: 0.7,
+          heightFactor: 0.5,
+          // ignore: deprecated_member_use
+          child: RaisedButton(
+            elevation: 5,
+            color: Colors.blue,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+            onPressed: () {
+              Navigator.pop(context, pickerBloc.currentLocation);
+            },
+            child: Text(
+              "Confirm",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
             ),
           ),
         ),

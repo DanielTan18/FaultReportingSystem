@@ -104,6 +104,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     child: GestureDetector(
                       onTap: () async {
                         if (!await authProvider.signUp()) {
+                          // ignore: deprecated_member_use
                           _key.currentState.showSnackBar(
                               SnackBar(content: Text("Registration failed!")));
                           return;
