@@ -40,19 +40,6 @@ class FaultReportServices {
       String department,
       String urgency,
       String streetlightno}) {
-    // CollectionReference collectionReference =
-    //     Firestore.instance.collection(collection);
-
-    // Map<String, dynamic> data = {
-    //   "userId": user.user.uid,
-    //   "location": _locationInputController.text,
-    //   "faulttype": valueChoose,
-    //   "description": _descController.text,
-    //   "image": fileName,
-    // };
-
-    // collectionReference.add(data);
-
     _firestore.collection(collection).document(id).setData({
       "id": id,
       "description": description,
@@ -68,14 +55,6 @@ class FaultReportServices {
       "urgency": urgency,
       "streetlightno": streetlightno,
     });
-
-    // List<Map> convertedCart = [];
-    // List<String> restaurantIds = [];
-
-    // for(CartItemModel item in cart){
-    //   convertedCart.add(item.toMap());
-    //   restaurantIds.add(item.restaurantId);
-    // }
   }
 
   void updateFaultData(

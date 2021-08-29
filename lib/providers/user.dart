@@ -63,8 +63,6 @@ class UserProvider with ChangeNotifier {
           'name': name.text,
           'email': email.text,
           'uid': result.user.uid,
-          //'likedFood': [],
-          //'likedRestaurants': []
         });
       });
       return true;
@@ -107,7 +105,6 @@ class UserProvider with ChangeNotifier {
 
   getReports() async {
     faultreports = await _faultReportServices.getUserReports(userId: _user.uid);
-    //print("providers _user.uid is " + _user.uid);
     notifyListeners();
   }
 }

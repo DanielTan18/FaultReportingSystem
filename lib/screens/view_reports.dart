@@ -25,7 +25,6 @@ class ViewReportsScreen extends StatelessWidget {
         user.faultreports.remove(s);
       }
     }
-    //print("after sorting is " + user.faultreports[0].createdAt.toString());
 
     return Scaffold(
         appBar: AppBar(

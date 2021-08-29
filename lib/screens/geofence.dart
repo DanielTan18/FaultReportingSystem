@@ -252,22 +252,6 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
     );
   }
 
-  // Widget buildActivityMonitor() {
-  //   return StreamBuilder<Activity>(
-  //       stream: activityController.stream,
-  //       builder: (context, snapshot) {
-  //         final updatedTime = DateTime.now();
-  //         final content = snapshot.data?.toMap()?.toString() ?? '';
-
-  //         return Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text('\tActivity (updated: $updatedTime)'),
-  //               Card(color: Colors.lightGreen, child: Text(content))
-  //             ]);
-  //       });
-  // }
-
   Widget buildGeofenceMonitor() {
     return StreamBuilder<Geofence>(
         stream: geofenceController.stream,
